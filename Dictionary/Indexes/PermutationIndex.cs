@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Dictionary
 {
@@ -19,6 +20,7 @@ namespace Dictionary
             _parser = new Tokenizer();
         }
 
+        //лексиконом перестановок
         private List<string> LexicalPermutations(string s)
         {
             List<string> permutations = new List<string>();
@@ -62,9 +64,53 @@ namespace Dictionary
 
         public List<int> WildcardSearch(List<string> query)
         {
-            List<int> res = new List<int>();
+            for (int i = 0; i < query.Count; i++)
+            {
+                if (query[i] != "*")
+                {
+                    query[i] = "$" + query[i];
+                    break;
+                }
+            }
+            for (int j = query.Count - 1; j >= 0; j--)
+            {
+                if (query[j] != "*")
+                {
+                    query[j] += "$";
+                    break;
+                }
+            }
 
-            return res;
+            HashSet<string> grams = new HashSet<string>();
+
+            foreach (var part in query)
+            {
+                if (part != "*")
+                {
+                    foreach (var gram in TokenTo2GramList(part))
+                    {
+                        grams.Add(gram);
+                    }
+
+                }
+            }
+
+            List<string> pretendents = new List<string>();
+
+            foreach (var gram in grams)
+            {
+                if (pretendents.Count == 0)
+                {
+                    pretendents = _nGram[gram].ToList();
+                }
+                else
+                {
+                    pretendents = pretendents.Intersect(_nGram[gram].ToList()).ToList();
+                }
+
+            }
+
+            return pretendents.SelectMany(p => _index.Search(p)).Distinct().ToList();
         }
     }
 }

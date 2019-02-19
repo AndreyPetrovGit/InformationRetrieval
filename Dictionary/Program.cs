@@ -14,7 +14,7 @@ namespace Dictionary
             InvertedIndex2Word ix2 = new InvertedIndex2Word(filePath);
             PositionInvertedIndex pii = new PositionInvertedIndex(filePath);
 
-            NGramIndex ng = new NGramIndex(filePath);
+            NGramIndex ng = new NGramIndex(filePath, ix);
             PermutationIndex pi = new PermutationIndex(filePath);
 
 

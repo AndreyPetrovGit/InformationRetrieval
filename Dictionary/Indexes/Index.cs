@@ -108,6 +108,18 @@ namespace Dictionary
             return files.Except(_index[word1]).ToList();
         }
 
+        public List<int> Search(string word)
+        {
+            if (_index.ContainsKey(word))
+            {
+                return _index[word].ToList();
+            }
+            else
+            {
+                return new List<int>();
+            }
+        }
+
         public List<int> Search(Func<List<int>> func)
         {
             return func();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Dictionary
@@ -7,20 +8,33 @@ namespace Dictionary
     //4
     class NGramIndex
     {
-        Dictionary<string/*n-gram*/, HashSet<int/*docId*/>> _nGram = new Dictionary<string, HashSet<int>>();
+        Dictionary<string/*n-gram*/, HashSet<string/*token*/>> _nGram = new Dictionary<string, HashSet<string>>();
         private HashSet<int> files = new HashSet<int>();//processed files
         public string FilePath { get; set; }
         private Tokenizer _parser;
+        private Index _index;
 
-        public NGramIndex(string filePath)
+        public NGramIndex(string filePath, Index index)
         {
             FilePath = filePath;
+            _index = index;
             _parser = new Tokenizer();
         }
 
+        //что если размер слова меньше k?
         public HashSet<string> TokenTo2GramList(string token)
         {
-            throw new NotImplementedException();
+            HashSet<string> grams = new HashSet<string>();
+            token = $"${token}$";
+            int k = 2;
+            
+            for (int i = 0; i < token.Length - k; i++)
+            {
+                string nextGram = token.Substring(i, k);
+                grams.Add(nextGram);
+            }
+
+            return grams;
         }
 
         public void EnreachIndex(string fileName, string fileExt)
@@ -31,29 +45,71 @@ namespace Dictionary
                 var list2Gram = TokenTo2GramList(token);
                 foreach (var item2Gram in list2Gram)
                 {
-                    HashSet<int> list = null;
+                    
                     if (_nGram.ContainsKey(item2Gram))
                     {
-                        list = _nGram[item2Gram];
-                        list.Add(Int32.Parse(fileName));
-                        _nGram[item2Gram] = list;
+                        _nGram[item2Gram].Add(token);
                     }
                     else
                     {
-
-                        list = new HashSet<int>();
-                        list.Add(Int32.Parse(fileName));
+                        HashSet<string> list = new HashSet<string>();
+                        list.Add(token);
                         _nGram.Add(item2Gram, list);
                     }
                 }
             }
         }
 
+        // *f*f*f*f*? **?
         public List<int> WildcardSearch(List<string> query)
         {
-            List<int> res = new List<int>();
+            for (int i = 0; i < query.Count; i++)
+            {
+                if (query[i] != "*")
+                {
+                    query[i] = "$" + query[i];
+                    break;
+                } 
+            }
+            for (int j = query.Count - 1; j >= 0; j--)
+            {
+                if (query[j] != "*")
+                {
+                    query[j] += "$";
+                    break;
+                }
+            }
 
-            return res;
+            HashSet<string> grams = new HashSet<string>();
+
+            foreach (var part in query)
+            {
+                if (part != "*")
+                {
+                    foreach (var gram in TokenTo2GramList(part))
+                    {
+                        grams.Add(gram);
+                    }
+                    
+                }
+            }
+
+            List<string> pretendents = new List<string>();
+
+            foreach (var gram in grams)
+            {
+                if (pretendents.Count == 0)
+                {
+                    pretendents = _nGram[gram].ToList();
+                }
+                else
+                {
+                    pretendents = pretendents.Intersect(_nGram[gram].ToList()).ToList();
+                }
+                
+            }
+
+            return pretendents.SelectMany(p => _index.Search(p)).Distinct().ToList(); //ToDo: постфільтрація
         }
     }
 }
