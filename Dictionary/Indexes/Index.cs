@@ -8,7 +8,7 @@ namespace Dictionary
     class Index
     {
         public string FilePath { get; set; }
-        private Dictionary<string, HashSet<int>> _index;
+        private Dictionary<string/*termName*/, HashSet<int/*docId*/>> _index;
         private HashSet<int> files = new HashSet<int>();
         private Tokenizer _parser;
 

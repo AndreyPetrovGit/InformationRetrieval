@@ -33,7 +33,7 @@ namespace Dictionary
                     {
                         var positions = docIdDic[Int32.Parse(fileName)];
                         positions.Add(tokenPos);
-                        docIdDic[Int32.Parse(fileName)] = positions;// need?
+                        docIdDic[Int32.Parse(fileName)] = positions;
                         
                     }
                     else
@@ -42,7 +42,7 @@ namespace Dictionary
                         positions.Add(tokenPos);
                         docIdDic.Add(Int32.Parse(fileName), positions);
                     }
-                    _index[word] = docIdDic;// need?
+                    _index[word] = docIdDic;
                 }
                 else
                 {

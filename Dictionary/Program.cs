@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Dictionary
 {
@@ -12,14 +13,21 @@ namespace Dictionary
             IncidenceMatrix im = new IncidenceMatrix(filePath);
             InvertedIndex2Word ix2 = new InvertedIndex2Word(filePath);
             PositionInvertedIndex pii = new PositionInvertedIndex(filePath);
-            for (int i = 1; i <= 10; i++)
+
+            NGramIndex ng = new NGramIndex(filePath);
+            PermutationIndex pi = new PermutationIndex(filePath);
+
+
+            var fileRepositry = new FileRepository();
+            foreach (int fileId in fileRepositry.GetFiles())
             {
-                Console.WriteLine("Start " +i);
+                Console.WriteLine("Start " + fileId);
                // ix.EnreachIndex(i.ToString(), "txt");
                 //im.EnreachIncidenceMatrix(i.ToString(), "txt");
                 //ix2.EnreachIndex(i.ToString(), "txt");
-                pii.EnreachIndex(i.ToString(), "txt");
-                Console.WriteLine("End " + i);
+                ng.EnreachIndex(fileId.ToString(), "txt");
+                pi.EnreachIndex(fileId.ToString(), "txt");
+                Console.WriteLine("End " + fileId);
             }
 
 
@@ -47,7 +55,16 @@ namespace Dictionary
             Console.WriteLine("pii");
 
 
+            Console.WriteLine("NG");
+            ng.WildcardSearch(new List<string> { "colo", "*", "r" }).ForEach(Console.WriteLine);
+            ng.WildcardSearch(new List<string> { "*", "ur" }).ForEach(Console.WriteLine);
+            ng.WildcardSearch(new List<string> { "colo", "*"}).ForEach(Console.WriteLine);
 
+
+            Console.WriteLine("pi");
+            pi.WildcardSearch(new List<string> { "colo", "*", "r" }).ForEach(Console.WriteLine);
+            pi.WildcardSearch(new List<string> { "*", "ur" }).ForEach(Console.WriteLine);
+            pi.WildcardSearch(new List<string> { "colo", "*" }).ForEach(Console.WriteLine);
 
 
             Console.ReadLine();
