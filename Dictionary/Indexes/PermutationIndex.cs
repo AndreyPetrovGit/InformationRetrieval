@@ -20,7 +20,7 @@ namespace Dictionary
             _parser = new Tokenizer();
         }
 
-        //лексиконом перестановок
+        //лексикон перестановок
         private List<string> LexicalPermutations(string s)
         {
             List<string> permutations = new List<string>();
@@ -44,44 +44,26 @@ namespace Dictionary
             files.Add(Int32.Parse(fileName));
             foreach (string word in _parser.Parse(FilePath, fileName, fileExt))
             {
-                HashSet<int> list = null;
-                if (_trie.Prefix(word) != null)
+                foreach (var perm in LexicalPermutations(word))
                 {
-                    list = _trie.Prefix(word).docIds;
-                    list.Add(Int32.Parse(fileName));
-                    //_trie[word] = list; update list
+                    if (_trie.Prefix(perm) == null)
+                    {
+                        _trie.Insert(perm);
+                    }
                 }
-                else
-                {
-
-                    list = new HashSet<int>();
-                    list.Add(Int32.Parse(fileName));
-                    _trie.Insert(word); // +list
-                }
-
             }
+        }
+
+        private string Shift()
+        {
+            throw new NotImplementedException();
         }
 
         public List<int> WildcardSearch(List<string> query)
         {
-            for (int i = 0; i < query.Count; i++)
-            {
-                if (query[i] != "*")
-                {
-                    query[i] = "$" + query[i];
-                    break;
-                }
-            }
-            for (int j = query.Count - 1; j >= 0; j--)
-            {
-                if (query[j] != "*")
-                {
-                    query[j] += "$";
-                    break;
-                }
-            }
+            query[query.Count - 1] += "$";
 
-            HashSet<string> grams = new HashSet<string>();
+
 
             foreach (var part in query)
             {
