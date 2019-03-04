@@ -54,45 +54,50 @@ namespace Dictionary
             }
         }
 
-        private string Shift()
+        private string ShiftWildcardToEnd(string str)
         {
             throw new NotImplementedException();
         }
 
-        public List<int> WildcardSearch(List<string> query)
+        private string ShiftToPervious(string str)
         {
-            query[query.Count - 1] += "$";
-
-
-
-            foreach (var part in query)
-            {
-                if (part != "*")
-                {
-                    foreach (var gram in TokenTo2GramList(part))
-                    {
-                        grams.Add(gram);
-                    }
-
-                }
-            }
-
-            List<string> pretendents = new List<string>();
-
-            foreach (var gram in grams)
-            {
-                if (pretendents.Count == 0)
-                {
-                    pretendents = _nGram[gram].ToList();
-                }
-                else
-                {
-                    pretendents = pretendents.Intersect(_nGram[gram].ToList()).ToList();
-                }
-
-            }
-
-            return pretendents.SelectMany(p => _index.Search(p)).Distinct().ToList();
+            throw new NotImplementedException();
         }
+
+    //    public List<int> WildcardSearch(List<string> query)
+    //    {
+    //        query[query.Count - 1] += "$";
+
+
+
+    //        foreach (var part in query)
+    //        {
+    //            if (part != "*")
+    //            {
+    //                foreach (var gram in TokenTo2GramList(part))
+    //                {
+    //                    grams.Add(gram);
+    //                }
+
+    //            }
+    //        }
+
+    //        List<string> pretendents = new List<string>();
+
+    //        foreach (var gram in grams)
+    //        {
+    //            if (pretendents.Count == 0)
+    //            {
+    //                pretendents = _nGram[gram].ToList();
+    //            }
+    //            else
+    //            {
+    //                pretendents = pretendents.Intersect(_nGram[gram].ToList()).ToList();
+    //            }
+
+    //        }
+
+    //        return pretendents.SelectMany(p => _index.Search(p)).Distinct().ToList();
+    //    }
     }
 }

@@ -62,12 +62,24 @@ namespace Dictionary
 
 
             Console.WriteLine("pi");
-            pi.WildcardSearch(new List<string> { "colo", "*", "r" }).ForEach(Console.WriteLine);
-            pi.WildcardSearch(new List<string> { "*", "ur" }).ForEach(Console.WriteLine);
-            pi.WildcardSearch(new List<string> { "colo", "*" }).ForEach(Console.WriteLine);
+            //pi.WildcardSearch(new List<string> { "colo", "*", "r" }).ForEach(Console.WriteLine);
+            //pi.WildcardSearch(new List<string> { "*", "ur" }).ForEach(Console.WriteLine);
+            //pi.WildcardSearch(new List<string> { "colo", "*" }).ForEach(Console.WriteLine);
 
 
             Console.ReadLine();
+
+            //The EF Core tools version '2.1.4-rtm-31024' is older than that of the runtime '3.0.0-preview.19074.3'.Update the tools for the latest features and bug fixes.
+            //Unable to identify the primary key for table 'public.movies_actors'.
+            //Unable to generate entity type for table 'public.movies_actors'.
+            //Unable to identify the primary key for table 'public.genres'.
+            //Unable to generate entity type for table 'public.genres'.
+            //Could not find type mapping for column 'public.movies.genre' with data type 'cube'.Skipping column.
+            //Unable to scaffold the index 'movies_genres_cube'.The following columns could not be scaffolded: genre.
+
+//            The EF Core tools version '2.1.4-rtm-31024' is older than that of the runtime '3.0.0-preview.19074.3'.Update the tools for the latest features and bug fixes.
+//Could not find type mapping for column 'public.movies.genre' with data type 'cube'.Skipping column.
+//Unable to scaffold the index 'movies_genres_cube'.The following columns could not be scaffolded: genre.
 
         }
     }
